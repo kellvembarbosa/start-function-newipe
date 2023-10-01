@@ -44,16 +44,16 @@ export default async ({ req, res, log, error }) => {
 
       if (revenueCats.length != 0 || telegrams.length != 0) {
         // first where appId == revCatProjectId on revenueCats
-        const revenueCatInfo = revenueCats.find(revCat => revCat.revCatProjectId == appId);
+        const revenueCatFromDb = revenueCats.find(revCat => revCat.revCatProjectId == appId);
 
-        if (!revenueCatInfo) {
+        if (!revenueCatFromDb) {
           return res.json({
             ok: false,
             message: 'This bot has no revenue cats or telegram channels'
           });
         }
 
-        const { revCatProjectId, htmlText, name } = revenueCatInfo;
+        const { revCatProjectId, htmlText, name } = revenueCatFromDb;
         const revenueCat = revenueCatInfos(req, { revCatProjectId, htmlText, name, botName, defaultCurrency });
         
         for (let i = 0; i < telegrams.length; i++) {
