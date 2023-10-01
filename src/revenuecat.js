@@ -1,7 +1,7 @@
 ﻿import { getCountryName, getType } from './utils.js';
 
 export async function sendRevTelegram(chatIds, telegramToken, htmlText, log, error) {
-
+    log(`===> start send telegram chats: ${chatIds}`)
     for (let chatId of chatIds) {
         try {
             const response = await fetch(`https://api.telegram.org/bot${telegramToken}/sendMessage`, {

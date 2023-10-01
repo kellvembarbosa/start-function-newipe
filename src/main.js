@@ -62,6 +62,7 @@ export default async ({ req, res, log, error }) => {
           const text = revReplaceVariables(htmlText, revenueCat);
 
           if (!revCatProjectId) {
+            log(`===> send telegram chats: ${chatIds} for bot: ${botName} and revenueCat: ${name} without revenueCatProjectId`);
             await sendRevTelegram(chatIds, telegramToken, text, log, error);
           }
         }
