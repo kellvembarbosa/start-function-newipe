@@ -45,13 +45,16 @@ export default async ({ req, res, log, error }) => {
           log(`===> start send telegram chats: ${chatIds} for bot: ${botName} and revenueCat: ${name}`);
 
           if (!telegramToken) {
+            error(`==> This bot telegram token is not valid: ${telegramToken}`)
             return res.json({
               ok: false,
               message: 'This bot telegram token is not valid'
             });
           }
+          
 
           if (!chatIds || !chatIds.length) {
+            error(`==> This bot has no chat ids: ${chatIds}`)
             return res.json({
               ok: false,
               message: 'This bot has no chat ids'
@@ -64,6 +67,8 @@ export default async ({ req, res, log, error }) => {
           if (!revCatProjectId) {
             log(`===> send telegram chats: ${chatIds} for bot: ${botName} and revenueCat: ${name} without revenueCatProjectId`);
             await sendRevTelegram(chatIds, telegramToken, text, log, error);
+          } else {
+            log(`===> not valid projectId`);
           }
         }
       } else {
@@ -76,7 +81,7 @@ export default async ({ req, res, log, error }) => {
 
       return res.json({
         ok: true,
-        message: 'webhook received!'
+        message: `webhook received for botId: ${botId} and botName: ${botName}`
       });
 
     } catch (error) {
