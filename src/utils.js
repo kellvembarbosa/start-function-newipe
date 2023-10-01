@@ -97,10 +97,3 @@ export function getType(type) {
 
     return typeData;
 }
-
-// Função para obter porcentagem da taxa do país
-// Exemplo: getTaxPercentage("0.1");
-export function getTaxPercentage(taxPercentage) {
-    const taxPercentage = parseFloat(taxPercentage) * 100;
-    return `${taxPercentage}%`;
-}

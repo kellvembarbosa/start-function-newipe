@@ -1,4 +1,4 @@
-﻿import { getCountryName, getTaxPercentage, getType, replaceVariables } from './utils.js';
+﻿import { getCountryName, getType, replaceVariables } from './utils.js';
 
 export async function sendRevTelegram(chatIds, telegramToken, htmlText, log, error) {
 
@@ -61,4 +61,11 @@ export function revReplaceVariables(htmlText, variables) {
     }
 
     return text;
+}
+
+
+// Função para obter porcentagem da taxa do país
+// Exemplo: getTaxPercentage("0.1");
+export function getTaxPercentage(taxPercentage) {
+    return `${parseFloat(taxPercentage) * 100}%`;
 }
