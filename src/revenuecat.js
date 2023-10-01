@@ -42,7 +42,7 @@ export function revenueCatInfos(req, revInfos) {
         countryCode: req.body.event.country_code,
         countryName: getCountryName(req.body.event.country_code),
         storeCountry: req.body.event.store,
-        taxPercentage: getTaxPercentage(req.body.event.tax_percentage),
+        countryTaxPercentage: getTaxPercentage(req.body.event.tax_percentage),
         botLink: `https://app.revenuecat.com/customers/${revCatProjectId}/${req.body.event.app_user_id}`,
         revCatProjectId: revCatProjectId,
         appName: name,
@@ -56,8 +56,10 @@ export function revenueCatInfos(req, revInfos) {
 export function revReplaceVariables(htmlText, variables) {
     let text = htmlText;
     for (const key in variables) {
+        
         const value = variables[key];
-        text = text.replace(`{{${key}}}`, value);
+        text = text.replaceAll(`{{ ${key} }}`, value);
+        text = text.replaceAll(`{{${key}}}`, value);
     }
 
     return text;
