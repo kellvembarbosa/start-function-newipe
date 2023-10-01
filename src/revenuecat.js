@@ -43,7 +43,7 @@ export function revenueCatInfos(req, revInfos) {
         countryName: getCountryName(req.body.event.country_code),
         storeCountry: req.body.event.store,
         countryTaxPercentage: getTaxPercentage(req.body.event.tax_percentage),
-        botLink: `https://app.revenuecat.com/customers/${revCatProjectId}/${req.body.event.app_user_id}`,
+        buyLink: `https://app.revenuecat.com/customers/${revCatProjectId}/${req.body.event.app_user_id}`,
         revCatProjectId: revCatProjectId,
         appName: name,
         botName: botName,
