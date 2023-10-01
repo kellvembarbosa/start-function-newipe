@@ -47,7 +47,10 @@ export function revenueCatInfos(req, revInfos) {
         revCatProjectId: revCatProjectId,
         appName: name,
         botName: botName,
-        defaultCurrency: defaultCurrency,
+        myCurrency: defaultCurrency,
+        priceInPurchasedCurrency: req.body.event.price_in_purchased_currency,
+        priceInPurchased: req.body.event.price,
+        currencyInPurchased: req.body.event.currency,
     };
 }
 
