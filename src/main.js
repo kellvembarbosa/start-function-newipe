@@ -42,7 +42,7 @@ export default async ({ req, res, log, error }) => {
 
           const revenueCat = revenueCatInfos(req, { revCatProjectId, htmlText, name, botName, defaultCurrency });
 
-          log(`===> start send telegram chats: ${chatIds} for bot: ${botName} and revenueCat: ${name}`);
+          log(`===> start send telegram chats: ${chatIds} for bot: ${botName} and revenueCat: ${name} and revCatProjectId: ${revCatProjectId}`);
 
           if (!telegramToken) {
             error(`==> This bot telegram token is not valid: ${telegramToken}`)
