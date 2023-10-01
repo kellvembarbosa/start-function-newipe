@@ -89,7 +89,7 @@ export default async ({ req, res, log, error }) => {
   }
 
   // The `req` object contains the request data
-  if (req.method === 'GET' && (req.path == '/' || req.path == '/webhook')) {
+  if (req.method === 'GET' && (req.path == '/' || req.path == '/webhook-revenueCat')) {
     // Send a response with the res object helpers
     // `res.send()` dispatches a string back to the client
     return res.json({
