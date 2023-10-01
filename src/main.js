@@ -1,5 +1,5 @@
 import { Client, Database, Query } from 'node-appwrite';
-import { sendRevTelegram, revenueCatInfos, revReplaceVariables } from './revenuecat';
+import { sendRevTelegram, revenueCatInfos, revReplaceVariables } from './revenuecat.js';
 // This is your Appwrite function
 // It's executed each time we get a request
 export default async ({ req, res, log, error }) => {

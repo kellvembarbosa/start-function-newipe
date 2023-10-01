@@ -1,4 +1,4 @@
-﻿import { getCountryName, getTaxPercentage, getType, replaceVariables } from './utils';
+﻿import { getCountryName, getTaxPercentage, getType, replaceVariables } from './utils.js';
 
 export async function sendRevTelegram(chatIds, telegramToken, htmlText, log, error) {
 
