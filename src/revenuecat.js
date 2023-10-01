@@ -1,4 +1,4 @@
-﻿import { getCountryName, getType, replaceVariables } from './utils.js';
+﻿import { getCountryName, getType } from './utils.js';
 
 export async function sendRevTelegram(chatIds, telegramToken, htmlText, log, error) {
 
