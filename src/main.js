@@ -22,8 +22,16 @@ export default async ({ req, res, log, error }) => {
   // The `req` object contains the request data
   if (req.method === 'POST' && req.path == '/webhook-revenueCat') {
     const botId = req.query.botId;
+    const appId = req.query.appId;
 
     if (!botId) {
+      return res.json({
+        ok: false,
+        message: 'This is not a valid webhook endpoint'
+      });
+    }
+
+    if (!appId) {
       return res.json({
         ok: false,
         message: 'This is not a valid webhook endpoint'
@@ -34,13 +42,22 @@ export default async ({ req, res, log, error }) => {
       const botInfo = await database.getDocument(DATABASE_ID, COLLECTION_ID, botId);
       const { botName, defaultCurrency, revenueCats, telegrams } = botInfo;
 
-      if ((revenueCats.length != 0 || telegrams.length != 0) && telegrams.length == revenueCats.length) {
+      if (revenueCats.length != 0 || telegrams.length != 0) {
+        // first where appId == revCatProjectId on revenueCats
+        const revenueCatInfo = revenueCats.find(revCat => revCat.revCatProjectId == appId);
+
+        if (!revenueCatInfo) {
+          return res.json({
+            ok: false,
+            message: 'This bot has no revenue cats or telegram channels'
+          });
+        }
+
+        const { revCatProjectId, htmlText, name } = revenueCatInfo;
+        const revenueCat = revenueCatInfos(req, { revCatProjectId, htmlText, name, botName, defaultCurrency });
         
         for (let i = 0; i < telegrams.length; i++) {
           const { telegramToken, chatIds } = telegrams[i];
-          const { revCatProjectId, htmlText, name } = revenueCats[i];
-
-          const revenueCat = revenueCatInfos(req, { revCatProjectId, htmlText, name, botName, defaultCurrency });
 
           log(`===> start send telegram chats: ${chatIds} for bot: ${botName} and revenueCat: ${name} and revCatProjectId: ${revCatProjectId}`);
 
