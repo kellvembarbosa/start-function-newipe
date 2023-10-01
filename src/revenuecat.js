@@ -20,8 +20,8 @@ export async function sendRevTelegram(chatIds, telegramToken, htmlText, log, err
                 log(`Erro ao enviar mensagem para o chat ${chatId}`)
                 throw new Error(`Erro ao enviar mensagem para o chat ${chatId}`);
             }
-    
-            const responseData = await response.json();
+
+            log(`===> Mensagem enviada para o chat ${chatId}`);
         } catch (err) {
             error(`Erro ao enviar mensagem para o chat ${chatId}:`, err);
         }

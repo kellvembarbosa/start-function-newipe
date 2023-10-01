@@ -1,4 +1,4 @@
-import { Client, Database } from 'node-appwrite';
+import { Client, Databases } from 'node-appwrite';
 import { sendRevTelegram, revenueCatInfos, revReplaceVariables } from './revenuecat.js';
 // This is your Appwrite function
 // It's executed each time we get a request
@@ -17,7 +17,7 @@ export default async ({ req, res, log, error }) => {
     .setProject(APPWRITE_FUNCTION_PROJECT_ID)
     .setKey(APPWRITE_API_KEY);
 
-  const database = new Database(client);
+  const database = new Databases(client);
 
   // The `req` object contains the request data
   if (req.method === 'POST' && req.path == '/webhook-revenueCat') {
