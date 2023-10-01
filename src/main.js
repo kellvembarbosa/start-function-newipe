@@ -1,6 +1,5 @@
 import { Client, Database, Query } from 'node-appwrite';
-import { getCountryName, getTaxPercentage, getType, replaceVariables } from './utils';
-import { sendTelegram } from './revenuecat';
+import { sendRevTelegram, revenueCatInfos, revReplaceVariables } from './revenuecat';
 // This is your Appwrite function
 // It's executed each time we get a request
 export default async ({ req, res, log, error }) => {
@@ -14,37 +13,15 @@ export default async ({ req, res, log, error }) => {
 
   // Why not try the Appwrite SDK?
   const client = new Client()
-     .setEndpoint('https://cloud.appwrite.io/v1')
-     .setProject(APPWRITE_FUNCTION_PROJECT_ID)
-     .setKey(APPWRITE_API_KEY);
+    .setEndpoint('https://cloud.appwrite.io/v1')
+    .setProject(APPWRITE_FUNCTION_PROJECT_ID)
+    .setKey(APPWRITE_API_KEY);
 
   const database = new Database(client);
 
-  // You can log messages to the console
-  log('Hello, Logs!');
-
-  // If something goes wrong, log an error
-  error('Hello, Errors!');
-
   // The `req` object contains the request data
   if (req.method === 'POST' && req.path == '/webhook-revenueCat') {
-
     const botId = req.query.botId;
-
-    let type = getType(req.body.event.type);
-
-    const revenueCat = {
-      type: type.typeShort,
-      typeMessage: type.typeMessage,
-      typeEmoji: type.typeEmoji,
-      environment: req.body.event.environment,
-      appUserId: req.body.event.app_user_id,
-      productId: req.body.event.product_id,
-      countryCode: req.body.event.country_code,
-      countryName: getCountryName(req.body.event.country_code),
-      storeCountry: req.body.event.store,
-      taxPercentage: getTaxPercentage(req.body.event.tax_percentage),
-    }
 
     if (!botId) {
       return res.json({
@@ -55,26 +32,46 @@ export default async ({ req, res, log, error }) => {
 
     try {
       const botInfo = await database.getDocument(DATABASE_ID, COLLECTION_ID, botId);
-      const { botName } = botInfo;
+      const { botName, defaultCurrency, revenueCats, telegrams } = botInfo;
 
-      if (!botTelegramToken) {
+      if ((revenueCats.length != 0 || telegrams.length != 0) && telegrams.length == revenueCats.length) {
+        
+        for (let i = 0; i < telegrams.length; i++) {
+          const { telegramToken, chatIds } = telegrams[i];
+          const { revCatProjectId, htmlText, name } = revenueCats[i];
+
+          const revenueCat = revenueCatInfos(req, { revCatProjectId, htmlText, name, botName, defaultCurrency });
+
+          log(`===> start send telegram chats: ${chatIds} for bot: ${botName} and revenueCat: ${name}`);
+
+          if (!telegramToken) {
+            return res.json({
+              ok: false,
+              message: 'This bot telegram token is not valid'
+            });
+          }
+
+          if (!chatIds || !chatIds.length) {
+            return res.json({
+              ok: false,
+              message: 'This bot has no chat ids'
+            });
+          }
+
+          // replace variables
+          const text = revReplaceVariables(htmlText, revenueCat);
+
+          if (!revCatProjectId) {
+            await sendRevTelegram(chatIds, telegramToken, text, log, error);
+          }
+        }
+      } else {
         return res.json({
           ok: false,
-          message: 'This bot telegram token is not valid'
+          message: 'This bot has no revenue cats or telegram channels'
         });
       }
 
-      if (!chatIds || !chatIds.length) {
-        return res.json({
-          ok: false,
-          message: 'This bot has no chat ids'
-        });
-      }
-
-      if (!revenueCatProjectId) {
-        await sendTelegram(chatIds, botTelegramToken, log, error);
-      }
-      
 
       return res.json({
         ok: true,

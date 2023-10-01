@@ -104,14 +104,3 @@ export function getTaxPercentage(taxPercentage) {
     const taxPercentage = parseFloat(taxPercentage) * 100;
     return `${taxPercentage}%`;
 }
-
-// Função para substituir as variáveis no HTML
-// Exemplo: replaceVariables("Olá {{name}}, tudo bem?", {name: "João"});
-export function replaceVariables(htmlText, variables) {
-    let text = htmlText;
-    for (const key in variables) {
-        const value = variables[key];
-        text = text.replace(`{{${key}}}`, value);
-    }
-    return text;
-}
