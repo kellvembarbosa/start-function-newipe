@@ -1,4 +1,4 @@
-import { Client, Database, Query } from 'node-appwrite';
+import { Client, Database } from 'node-appwrite';
 import { sendRevTelegram, revenueCatInfos, revReplaceVariables } from './revenuecat.js';
 // This is your Appwrite function
 // It's executed each time we get a request
